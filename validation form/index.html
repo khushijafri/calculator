@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Form with Captcha</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .login-form {
+      width: 300px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    .form-input {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    #captcha-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    #captcha {
+      margin-right: 10px;
+      font-size: 18px;
+    }
+
+    #captcha-input {
+      width: 100px;
+    }
+
+    #login-btn {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    #login-btn:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-form">
+    <div class="form-input">
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="Enter your username" />
+    </div>
+
+    <div class="form-input">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter your password" />
+    </div>
+
+    <div id="captcha-container">
+      <span id="captcha"></span>
+      <input type="text" id="captcha-input" placeholder="Enter result" />
+      <button id="refresh-captcha" onclick="generateCaptcha()">Refresh</button>
+    </div>
+
+    <div class="form-input">
+      <button id="login-btn" onclick="validateForm()">Login</button>
+    </div>
+  </div>
+
+  <script>
+    function generateCaptcha() {
+      const R1 = Math.floor(Math.random() * 10);
+      const R2 = Math.floor(Math.random() * 10);
+      const captchaText = `${R1} + ${R2}`;
+      document.getElementById("captcha").innerText = captchaText;
+    }
+
+    function validateForm() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      const captchaInput = document.getElementById("captcha-input").value;
+
+      // Validate Username
+      if (!/^[a-zA-Z]+$/.test(username) || username.length > 25) {
+        alert("Invalid username. Please use only alphabets, and the length should not exceed 25 characters.");
+        return;
+      }
+      // Validate Password
+      if (!/(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{6,}/.test(password)) {
+        alert("Invalid password. Password must contain at least 1 uppercase letter, 1 numeric value, and 1 special character.");
+        return;
+      }
+      // Validate Captcha
+      const [R1, R2] = document.getElementById("captcha").innerText.split(" + ").map(Number);
+      const captchaResult = R1 + R2;
+      if (parseInt(captchaInput) !== captchaResult) {
+        alert("Incorrect captcha result. Please try again.");
+        generateCaptcha(); // Refresh captcha
+        return;
+      }
+      // If all validations pass, you can proceed with form submission
+      alert("Successful submission!");
+    }
+
+    // Initial captcha generation
+    generateCaptcha();
+  </script>
+</body>
+</html>

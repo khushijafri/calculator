@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Event Capturing Example</title>
+</head>
+
+<body>
+    <div id="outer">
+        <span id="middle">
+            <button id="inner">Click me!</button>
+        </span>
+    </div>
+
+    <p id="output">Click an element to see event capturing</p>
+
+    <script>
+        // c. Changing bubbling to capturing
+        document.getElementById("outer").addEventListener("click", function () {
+            updateOutput("Capturing - addEventListener: Outer div clicked");
+        }, true);
+
+        document.getElementById("middle").addEventListener("click", function () {
+            updateOutput("Capturing - addEventListener: Middle span clicked");
+        }, true);
+
+        document.getElementById("inner").addEventListener("click", function () {
+            updateOutput("Capturing - addEventListener: Inner button clicked");
+        }, true);
+
+        function updateOutput(message) {
+            document.getElementById("output").innerText = message;
+        }
+    </script>
+</body>
+
+</html>
